@@ -1,6 +1,26 @@
-import './assets/main.css'
+import './assets/main.css';
+import { createApp } from 'vue';
+import { createRouter, createWebHistory } from 'vue-router';
+import App from './App.vue';
+import HomeViews from './views/homeviews.vue';
+import PokemonDetails from './components/pokemondetails.vue'; // Sửa đường dẫn
 
-import { createApp } from 'vue'
-import App from './App.vue'
+const routes = [
+    {
+        path: '/',
+        component: HomeViews
+    },
+    {
+        path: '/:name',
+        component: PokemonDetails
+    }
+];
 
-createApp(App).mount('#app')
+const router = createRouter({
+    history: createWebHistory(),
+    routes
+});
+
+createApp(App)
+    .use(router)
+    .mount('#app');
