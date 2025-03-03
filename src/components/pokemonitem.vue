@@ -1,25 +1,20 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-const router = useRouter();
-
-const goToDetails = () => {
-  router.push(`/${props.pokemon.name}`);
-};
+// hàm getID có rùi
 function getIDPokemon(url) {
     const parts = url.split('/');
     return parseInt(parts[parts.length - 2], 10);
 }
-
-const props = defineProps(['pokemon'])
-const emit = defineEmits(['selectPokemon'])
+const router = useRouter();
+const props = defineProps(['pokemon']);
+defineEmits(['selectPokemon'])
+function pokemonClicked ()
+{
+    sessionStorage.setItem("clickedPokemon", JSON.stringify(props.pokemon));
+    router.push('/' + props.pokemon.name);
+}
 const types = ref([]);
-
-const handleClick = () => {
-  console.log('Clicked:', props.pokemon);
-  emit('selectPokemon', props.pokemon);
-};
-
 async function fetchPokemonDetails() {
     const id = getIDPokemon(props.pokemon.url);
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
@@ -33,7 +28,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="pokemon-item" @click="handleClick">
+  <div class="pokemon-item" @click="pokemonClicked">
       <div class="pokemon-id">
         #{{ getIDPokemon(props.pokemon.url) }}
       </div>
